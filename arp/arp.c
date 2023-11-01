@@ -304,14 +304,6 @@ int main(int argc, char *argv[]){
             buffer[i] = 0x00;
         }
         int dump=0;
-        for (int i = 0; i < 60; i++)
-        {
-            printf("%02x ", buffer[i]);
-            dump += 1;
-            if (dump % 16 == 0) {
-                printf("\n");
-            }
-        }
         if(pcap_sendpacket(pcap,buffer,60)!=0){
             printf("send fail\n");
         }
@@ -324,19 +316,15 @@ int main(int argc, char *argv[]){
         if (ty == 0) {
             ethernet* ethp = (ethernet*)packet;//이더넷에 패킷 값 14바이트만큼 저장
             arphd* ahp = (arphd*)(packet + sizeof(ethernet));//이더넷에 저장한 부분 제외하고 저장
-            printf("\n");
             for (int i = 0; i < 6; i++) {
                 pmactemp[i] = ahp->src_hw_add[i];
-                printf("!!%02x!!\n", pmactemp[i]);
             }
         }
         else if (ty == 1) {
             ethernet* ethg = (ethernet*)packet;//이더넷에 패킷 값 14바이트만큼 저장
             arphd* ahg = (arphd*)(packet + sizeof(ethernet));//이더넷에 저장한 부분 제외하고 저장
-            printf("\n");
             for (int i = 0; i < 6; i++) {
                 gmactemp[i] = ahg->src_hw_add[i];
-                printf("!!%02x!!\n", gmactemp[i]);
             }
         }
         if (ty == 0) {
@@ -349,10 +337,6 @@ int main(int argc, char *argv[]){
         }
         else if (ty == 2) {
             ty = 3;
-            continue;
-        }
-        else if(ty == 3){
-            ty = 2;
             continue;
         }
         break;
